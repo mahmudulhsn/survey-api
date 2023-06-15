@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\UserRegisterRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -82,11 +83,11 @@ class AuthController extends Controller
     /**
      * Summary of me
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function me(Request $request): Response
+    public function me(Request $request): JsonResponse
     {
-        return response([
+        return response()->json([
             'user' => $request->user()
         ]);
     }
