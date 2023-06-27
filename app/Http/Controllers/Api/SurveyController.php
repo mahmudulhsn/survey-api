@@ -252,8 +252,14 @@ class SurveyController extends Controller
         return $question->update($validator->validated());
     }
 
-    public function getBySlug(Survey $survey)
+    public function getBySlug($slug)
     {
+        $survey = Survey::where('slug', $slug)->with('questions')->first();
+
+        if (!$survey) {
+            abort(404);
+        }
+        return $survey;
         if (!$survey->status) {
             return response("", 404);
         }
@@ -273,8 +279,10 @@ class SurveyController extends Controller
      * @param \App\Models\Survey $survey
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function storeAnswer(StoreSurveyAnswerRequest $request, Survey $survey)
+    public function storeAnswer(StoreSurveyAnswerRequest $request, $id)
     {
+        $survey = Survey::with('questions')->find($id);
+
         $validated = $request->validated();
 
         $surveyAnswer = SurveyAnswer::create([
